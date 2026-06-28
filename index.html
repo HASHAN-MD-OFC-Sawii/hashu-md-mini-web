@@ -3,248 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MR HASHUU OFC</title>
+    <title>MR HASHUU - Ultimate Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Modern Premium Design System */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Geist Sans", "SF Pro Display", Roboto, sans-serif;
+        :root { --primary: #7B2CBF; --secondary: #00F5FF; --bg: #020204; }
+        * { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: #ffffff; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* High-End Glassmorphism UI */
+        .glass { 
+            background: rgba(255, 255, 255, 0.01); 
+            backdrop-filter: blur(40px); 
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 30px 70px -10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05); 
         }
         
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000000; /* Pure Pitch Black */
-            color: #ffffff;
-        }
-
         /* -------------------------------------------------------------
-           STAGE 1: SECURE LOGIN SCREEN (Vercel Dark Style)
+           IPHONE (iOS) DYNAMIC ISLAND NOTIFICATION STYLE
         ------------------------------------------------------------- */
-        .login-container {
+        .ios-toast {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #050505;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 0, 85, 0.2);
+            padding: 12px 24px;
+            border-radius: 50px;
             z-index: 10000;
-            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
-            padding: 20px;
-        }
-
-        .login-box {
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-        }
-
-        .login-title {
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #eaeaea;
-            margin-bottom: 24px;
-        }
-
-        .input-wrapper {
-            position: relative;
-            margin-bottom: 16px;
-        }
-
-        .passcode-input {
-            width: 100%;
-            padding: 14px;
-            background: #0a0a0a;
-            border: 1px solid #222222;
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 16px;
-            text-align: center;
-            letter-spacing: 6px;
-            outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .passcode-input:focus {
-            border-color: #444444;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-        }
-
-        .login-btn:hover {
-            background: #eaeaea;
-        }
-
-        .login-btn:active {
-            transform: scale(0.98);
-        }
-
-        .error-msg {
-            font-size: 11px;
-            color: #ff3333;
-            letter-spacing: 1px;
-            margin-top: 12px;
-            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,85,0.1);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             opacity: 0;
-            transition: opacity 0.3s;
+            pointer-events: none;
         }
-
-        /* Error Shake Animation */
-        .shake {
-            animation: shakeAnim 0.4s ease-in-out;
+        .ios-toast.active {
+            top: 24px;
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
         }
 
         /* -------------------------------------------------------------
-           STAGE 2: MINIMAL SERVER CHECKER SCREEN
+           ULTRA-PREMIUM NUMBER PERCENTAGE LOADER OVERLAY
         ------------------------------------------------------------- */
-        .checker-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
-            padding: 20px;
+        .loading-overlay { 
+            position: fixed; 
+            inset: 0; 
+            background: #000000; 
+            z-index: 9999; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            flex-direction: column; 
         }
-
-        /* Percentage Number - Optimized Size */
+        .loading-overlay.active { display: flex; }
+        
         .percentage-num {
-            font-size: 48px; /* Kalin thibbe 84px - Dan lassanata podi kala */
-            font-weight: 700;
-            letter-spacing: -2px;
-            background: linear-gradient(180deg, #ffffff 30%, #555555 100%);
+            font-size: 84px;
+            font-weight: 800;
+            letter-spacing: -4px;
+            background: linear-gradient(180deg, #ffffff 30%, #333333 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
         }
-
         .percentage-num::after {
             content: '%';
-            font-size: 20px;
+            font-size: 24px;
             margin-left: 2px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .status-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            color: #888888;
-            margin-bottom: 24px;
+            color: #444;
             font-weight: 600;
         }
 
+        .status-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            color: #555555;
+            margin-bottom: 36px;
+            font-weight: 700;
+        }
+
         .progress-track {
-            width: 200px;
+            width: 160px;
             height: 2px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
             overflow: hidden;
             position: relative;
         }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: #ffffff;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-            transition: width 0.05s linear;
+        .loader-progress { 
+            width: 0%; 
+            height: 100%; 
+            background: #ffffff; 
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            transition: width 0.04s linear; 
         }
 
         /* -------------------------------------------------------------
-           STAGE 3: MAIN PORTAL IFRAME LAYER
+           IFRAME TARGET SYSTEM
         ------------------------------------------------------------- */
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
             position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
             z-index: 1;
             opacity: 0;
-            transform: scale(0.99);
-            transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), 
-                        transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: scale(1.03);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
         }
-
         iframe.portal-ready {
             opacity: 1;
             transform: scale(1);
+            pointer-events: auto;
         }
 
-        /* Dynamic Exit Classes */
-        .fade-out-exit {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+        .hidden { display: none !important; }
+        
+        .btn-clickable {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        .show-checker {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Keyframes */
-        @keyframes shakeAnim {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
+        .btn-clickable:active {
+            opacity: 0.85;
+            transform: scale(0.97);
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container" id="login-screen">
-        <div class="login-box" id="login-box">
-            <div class="login-title">𝐄𝐍𝐓𝐄𝐑 𝐘𝐎𝐔𝐑 𝐒𝐄𝐑𝐕𝐄𝐑 𝐂𝐎𝐃𝐄</div>
-            <div class="input-wrapper">
-                <input type="password" class="passcode-input" id="passcode" placeholder="Ex : server1">
-            </div>
-            <button class="login-btn" onclick="checkPasscode()">𝗟𝗢𝗚 𝗦𝗘𝗥𝗩𝗘𝗥</button>
-            <div class="error-msg" id="error-text">Access Denied. Wrong Server Code.</div>
+    <div id="iosToast" class="ios-toast">
+        <div class="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-[10px] font-black text-black">!</div>
+        <span class="text-xs font-bold tracking-wide text-red-400">NOT ALLOWED</span>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="percentage-num" id="percentage-counter">0</div>
+        <div class="status-label">CHECKING SERVERS</div>
+        <div class="progress-track">
+            <div id="loaderProgress" class="loader-progress"></div>
         </div>
     </div>
 
-    <div class="checker-container" id="loading-screen">
-        <div class="percentage-num" id="percentage-counter">0</div>
-        <div class="status-label">𝗖𝗛𝗘𝗖𝗞𝗜𝗡𝗚 𝗦𝗘𝗥𝗩𝗘𝗥𝗦...</div>
-        
-        <div class="progress-track">
-            <div class="progress-bar-fill" id="progress-line"></div>
+    <div id="loginPage" class="min-h-screen flex items-center justify-center px-6 relative z-10">
+        <div class="glass rounded-[2.8rem] p-10 max-w-md w-full text-center border-white/5 relative overflow-hidden">
+            <div class="absolute -top-10 -left-10 w-40 h-40 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-cyan-500 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-2xl shadow-purple-500/20 text-4xl font-black">H</div>
+            <h1 class="text-3xl font-extrabold mb-8 tracking-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">Login Gateway</h1>
+            
+            <div id="loginOptions" class="space-y-4">
+                <button id="googleBtn" class="btn-clickable w-full bg-white text-black py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 cursor-pointer select-none shadow-lg active:scale-95">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5" alt=""> Continue with Google
+                </button>
+                <button id="githubBtn" class="btn-clickable w-full bg-[#0d1117] text-white border border-white/10 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 cursor-pointer select-none active:scale-95 hover:bg-[#161b22]">
+                    <svg class="w-5 fill-white" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.11.81 2.235 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    Continue with GitHub
+                </button>
+                <button id="guestOptBtn" class="btn-clickable w-full bg-purple-600/5 text-purple-400 border border-purple-600/10 py-4 rounded-2xl font-bold text-sm cursor-pointer select-none hover:bg-purple-600/10">Guest Access</button>
+            </div>
+
+            <div id="googleForm" class="hidden space-y-4 text-left animate-fadeIn">
+                <div class="text-center mb-2">
+                    <p class="text-xs font-bold text-zinc-400 flex items-center justify-center gap-1">
+                         Google Account Verification
+                    </p>
+                </div>
+                <input type="text" id="gName" placeholder="Google Account Name" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-white transition text-sm">
+                <input type="tel" id="gPhone" placeholder="WhatsApp Number" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-white transition text-sm">
+                <button id="gLaunchBtn" class="btn-clickable w-full bg-white text-black py-4 rounded-2xl font-black text-sm shadow-xl transition cursor-pointer select-none">CONFIRM & LAUNCH</button>
+                <button onclick="hideAllForms()" class="w-full text-zinc-500 text-xs font-bold mt-2 text-center block cursor-pointer hover:text-zinc-400">Go Back</button>
+            </div>
+
+            <div id="guestForm" class="hidden space-y-4 text-left animate-fadeIn">
+                <input type="text" id="userName" placeholder="Your Full Name" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-purple-500 transition text-sm">
+                <input type="tel" id="userPhone" placeholder="WhatsApp Number" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-purple-500 transition text-sm">
+                <button id="launchBtn" class="btn-clickable w-full bg-cyan-500 text-black py-4 rounded-2xl font-black text-sm shadow-lg shadow-cyan-500/20 cursor-pointer select-none">LAUNCH SYSTEM</button>
+                <button onclick="hideAllForms()" class="w-full text-zinc-500 text-xs font-bold mt-2 text-center block cursor-pointer hover:text-zinc-400">Go Back</button>
+            </div>
         </div>
     </div>
 
@@ -255,46 +208,52 @@
     </iframe>
 
     <script>
-        // CONFIG: Menna methana thiyena 'HASHUU' eka wenas karala thamanata ona password eka danna puluwan
-        const CORRECT_PASSCODE = "server1"; 
+        // Setup Smooth Click Actions
+        document.getElementById('googleBtn').addEventListener('click', showGoogleForm);
+        document.getElementById('githubBtn').addEventListener('click', triggerIphoneNotification);
+        document.getElementById('guestOptBtn').addEventListener('click', showGuestForm);
+        
+        document.getElementById('gLaunchBtn').addEventListener('click', () => runSystemLoader());
+        document.getElementById('launchBtn').addEventListener('click', () => runSystemLoader());
 
-        const loginScreen = document.getElementById('login-screen');
-        const loginBox = document.getElementById('login-box');
-        const passcodeInp = document.getElementById('passcode');
-        const errorText = document.getElementById('error-text');
-
-        const iframe = document.getElementById('bot-core-frame');
-        const loader = document.getElementById('loading-screen');
-        const percentText = document.getElementById('percentage-counter');
-        const progressLine = document.getElementById('progress-line');
-
-        // Input eke Enter nala submit wenna set kirima
-        passcodeInp.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkPasscode();
-        });
-
-        function checkPasscode() {
-            const userInput = passcodeInp.value.trim();
-
-            if (userInput.toUpperCase() === CORRECT_PASSCODE.toUpperCase()) {
-                // Passcode eka hari nam Login screen eka ain karala Loading screen ekata yanawa
-                loginScreen.classList.add('fade-out-exit');
-                loader.classList.add('show-checker');
-                startLoadingProgress();
-            } else {
-                // Passcode eka waradi nam shake effect eka saha error eka trigger wenawa
-                loginBox.classList.add('shake');
-                errorText.style.opacity = "1";
-                passcodeInp.value = "";
-                
-                setTimeout(() => {
-                    loginBox.classList.remove('shake');
-                }, 400);
-            }
+        function showGoogleForm() { 
+            document.getElementById('loginOptions').classList.add('hidden'); 
+            document.getElementById('guestForm').classList.add('hidden'); 
+            document.getElementById('googleForm').classList.remove('hidden'); 
         }
 
-        function startLoadingProgress() {
-            const totalDuration = 5000; // Exact 5 seconds
+        function showGuestForm() { 
+            document.getElementById('loginOptions').classList.add('hidden'); 
+            document.getElementById('googleForm').classList.add('hidden'); 
+            document.getElementById('guestForm').classList.remove('hidden'); 
+        }
+        
+        function hideAllForms() { 
+            document.getElementById('guestForm').classList.add('hidden'); 
+            document.getElementById('googleForm').classList.add('hidden'); 
+            document.getElementById('loginOptions').classList.remove('hidden'); 
+        }
+
+        // iPhone Dynamic Island Notification Engine
+        function triggerIphoneNotification() {
+            const notification = document.getElementById('iosToast');
+            notification.classList.add('active');
+            
+            // Auto close after 2.5 seconds
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 2500);
+        }
+
+        // Exact 5-Second Percentage Loading Engine
+        function runSystemLoader() {
+            const overlay = document.getElementById('loadingOverlay');
+            const progressLine = document.getElementById('loaderProgress');
+            const percentCounter = document.getElementById('percentage-counter');
+            
+            overlay.classList.add('active');
+            
+            const totalDuration = 5000; // Locked strictly to 5 seconds
             const intervalStep = 30; 
             let elapsed = 0;
 
@@ -305,19 +264,22 @@
                 if (currentProgress >= 100) {
                     currentProgress = 100;
                     clearInterval(timer);
-                    revealMainSystem();
+                    renderMainIframePortal(); // Open Bot System
                 }
 
-                percentText.innerText = currentProgress;
+                percentCounter.innerText = currentProgress;
                 progressLine.style.width = currentProgress + "%";
             }, intervalStep);
         }
 
-        function revealMainSystem() {
-            loader.classList.remove('show-checker');
-            loader.classList.add('fade-out-exit');
+        function renderMainIframePortal() {
+            const iframe = document.getElementById('bot-core-frame');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('loadingOverlay').classList.remove('active');
+            
+            // Smoothly renders full screen Bot framework
             iframe.classList.add('portal-ready');
         }
     </script>
 </body>
-</html>
+                </html>
