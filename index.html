@@ -3,134 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MR HASHUU</title>
+    <title>MR HASHUU - API Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Modern Premium Design System */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            /* Ultra-clean modern tech font stack (Apple/Vercel style) */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Geist Sans", "SF Pro Display", Roboto, sans-serif;
-        }
+        :root { --primary: #7B2CBF; --secondary: #00F5FF; --bg: #050507; }
+        * { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: #ffffff; overflow: hidden; width: 100%; height: 100%; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); }
         
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000000; /* Pure Pitch Black */
-            color: #ffffff;
+        /* -------------------------------------------------------------
+           PREMIUM 5-SECOND SERVER CHECKER OVERLAY (Vercel Style)
+        ------------------------------------------------------------- */
+        .loading-overlay { 
+            position: fixed; 
+            inset: 0; 
+            background: #000000; /* Vercel Dark Color */
+            z-index: 9999; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            flex-direction: column; 
         }
-
-        /* Full Screen Loader Container */
-        .checker-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.5s;
-            padding: 20px;
-        }
-
-        /* Large Clean Elegant Percentage */
+        .loading-overlay.active { display: flex; }
+        
+        /* Compact Percentage Counter */
         .percentage-num {
-            font-size: 84px;
-            font-weight: 800;
-            letter-spacing: -4px;
-            background: linear-gradient(180deg, #ffffff 30%, #444444 100%);
+            font-size: 48px; /* Podi කරපු premium size එක */
+            font-weight: 700;
+            letter-spacing: -2px;
+            background: linear-gradient(180deg, #ffffff 30%, #555555 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
-
         .percentage-num::after {
             content: '%';
-            font-size: 28px;
-            margin-left: 4px;
-            color: #555;
+            font-size: 20px;
+            margin-left: 2px;
+            color: #666;
             font-weight: 500;
-            letter-spacing: normal;
         }
 
-        /* Server Checking Label */
         .status-label {
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 5px;
-            color: #ffffff;
-            margin-bottom: 30px;
+            color: #888888;
+            margin-bottom: 24px;
             font-weight: 600;
-            opacity: 0.9;
         }
 
-        /* Premium Minimal Linear Progress Track */
         .progress-track {
-            width: 220px;
+            width: 200px;
             height: 2px;
             background: rgba(255, 255, 255, 0.08);
             border-radius: 4px;
             overflow: hidden;
             position: relative;
         }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%; /* Dynamic JS Control */
-            background: #ffffff; /* Ultra Minimal White Line */
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            transition: width 0.05s linear;
+        .loader-progress { 
+            width: 0%; 
+            height: 100%; 
+            background: #ffffff; 
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+            transition: width 0.05s linear; 
         }
 
-        /* Iframe Styles & Reveal Animation */
+        /* -------------------------------------------------------------
+           FULL SCREEN IFRAME TARGET FROM ORIGINAL INDEX.HTML
+        ------------------------------------------------------------- */
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
             position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
             z-index: 1;
             opacity: 0;
-            transform: scale(0.98); /* Smooth scale up entry */
+            transform: scale(0.99);
             transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), 
                         transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
         }
-
-        /* Reveal State */
         iframe.portal-ready {
             opacity: 1;
             transform: scale(1);
         }
 
-        .checker-container.fade-out-exit {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- Minimalist Server Checker Loading Screen -->
-    <div class="checker-container" id="loading-screen">
+    <div id="loadingOverlay" class="loading-overlay">
         <div class="percentage-num" id="percentage-counter">0</div>
         <div class="status-label">CHECKING SERVERS</div>
-        
         <div class="progress-track">
-            <div class="progress-bar-fill" id="progress-line"></div>
+            <div id="loaderProgress" class="loader-progress"></div>
         </div>
     </div>
 
-    <!-- Main Server Portal Core Content[cite: 1] -->
-    <!-- created by mr hashuu coder official team -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center px-6">
+        <div class="glass rounded-[2.5rem] p-10 max-w-md w-full text-center border-white/10">
+            <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-cyan-500 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-2xl text-4xl font-black">H</div>
+            <h1 class="text-3xl font-extrabold mb-8 tracking-tight">Login Gateway</h1>
+            
+            <div id="loginOptions" class="space-y-4">
+                <button onclick="auth('Google')" class="w-full bg-white text-black py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 active:scale-95 transition">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5" alt=""> Continue with Google
+                </button>
+                <button onclick="auth('GitHub')" class="w-full bg-[#161b22] text-white border border-white/10 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 active:scale-95 transition">
+                    <svg class="w-5 fill-white" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.11.81 2.235 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    Continue with GitHub
+                </button>
+                <button onclick="showGuestForm()" class="w-full bg-purple-600/10 text-purple-400 border border-purple-600/20 py-4 rounded-2xl font-bold text-sm">Guest Access</button>
+            </div>
+
+            <div id="guestForm" class="hidden space-y-4 text-left">
+                <input type="text" id="userName" placeholder="Your Full Name" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-purple-500">
+                <input type="text" id="userPhone" placeholder="WhatsApp Number" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-purple-500">
+                <button onclick="auth('Guest')" class="w-full bg-cyan-500 text-black py-4 rounded-2xl font-black text-sm shadow-lg shadow-cyan-500/20 active:scale-95 transition">LAUNCH SYSTEM</button>
+                <button onclick="hideGuestForm()" class="w-full text-slate-500 text-xs font-bold mt-2 text-center block">Go Back</button>
+            </div>
+        </div>
+    </div>
+
     <iframe 
         src="https://zahid-mini-bot-production-6f58.up.railway.app/" 
         title="MR HASHUU FREE BOT" 
@@ -138,35 +141,44 @@
     </iframe>
 
     <script>
-        const iframe = document.getElementById('bot-core-frame');
-        const loader = document.getElementById('loading-screen');
-        const percentText = document.getElementById('percentage-counter');
-        const progressLine = document.getElementById('progress-line');
+        function showGuestForm() { document.getElementById('loginOptions').classList.add('hidden'); document.getElementById('guestForm').classList.remove('hidden'); }
+        function hideGuestForm() { document.getElementById('guestForm').classList.add('hidden'); document.getElementById('loginOptions').classList.remove('hidden'); }
 
-        const totalDuration = 5000; // Exact 5 seconds loading time
-        const intervalStep = 30; // Smooth tick interval in milliseconds
-        let elapsed = 0;
+        function auth(method) {
+            const overlay = document.getElementById('loadingOverlay');
+            const progressLine = document.getElementById('loaderProgress');
+            const percentText = document.getElementById('percentage-counter');
+            
+            // Activate the premium server checker screen
+            overlay.classList.add('active');
+            
+            const totalDuration = 5000; // Exact 5 seconds loading speed
+            const intervalStep = 30; 
+            let elapsed = 0;
 
-        const timer = setInterval(() => {
-            elapsed += intervalStep;
-            let currentProgress = Math.floor((elapsed / totalDuration) * 100);
+            const timer = setInterval(() => {
+                elapsed += intervalStep;
+                let currentProgress = Math.floor((elapsed / totalDuration) * 100);
 
-            if (currentProgress >= 100) {
-                currentProgress = 100;
-                clearInterval(timer);
-                revealMainSystem();
-            }
+                if (currentProgress >= 100) {
+                    currentProgress = 100;
+                    clearInterval(timer);
+                    showMainPortal(); // Show full screen bot frame when done
+                }
 
-            // Update loading numbers and progress track seamlessly
-            percentText.innerText = currentProgress;
-            progressLine.style.width = currentProgress + "%";
-        }, intervalStep);
+                percentText.innerText = currentProgress;
+                progressLine.style.width = currentProgress + "%";
+            }, intervalStep);
+        }
 
-        function revealMainSystem() {
-            // Smoothly remove loading dashboard and scale in iframe[cite: 1]
-            loader.classList.add('fade-out-exit');
+        function showMainPortal() {
+            const iframe = document.getElementById('bot-core-frame');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('loadingOverlay').classList.remove('active');
+            
+            // Fade-in reveal effect for the original full screen iframe
             iframe.classList.add('portal-ready');
         }
     </script>
 </body>
-</html>
+    </html>
