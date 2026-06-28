@@ -9,7 +9,7 @@
     <style>
         :root { --primary: #7B2CBF; --secondary: #00F5FF; --bg: #050507; }
         * { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #ffffff; overflow: hidden; width: 100%; height: 100%; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: #ffffff; }
         .mono { font-family: 'JetBrains Mono', monospace; }
         .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.08); }
         
@@ -19,7 +19,7 @@
         .loading-overlay { 
             position: fixed; 
             inset: 0; 
-            background: #000000; /* Vercel Dark Color */
+            background: #000000; /* Pure Vercel Black */
             z-index: 9999; 
             display: none; 
             align-items: center; 
@@ -30,7 +30,7 @@
         
         /* Compact Percentage Counter */
         .percentage-num {
-            font-size: 48px; /* Podi කරපු premium size එක */
+            font-size: 48px; /* Podi කරපු premium elegant text size එක */
             font-weight: 700;
             letter-spacing: -2px;
             background: linear-gradient(180deg, #ffffff 30%, #555555 100%);
@@ -73,7 +73,7 @@
         }
 
         /* -------------------------------------------------------------
-           FULL SCREEN IFRAME TARGET FROM ORIGINAL INDEX.HTML
+           FULL SCREEN IFRAME TARGET FROM ORIGINAL INDEX (18).HTML
         ------------------------------------------------------------- */
         iframe {
             width: 100%;
@@ -149,10 +149,10 @@
             const progressLine = document.getElementById('loaderProgress');
             const percentText = document.getElementById('percentage-counter');
             
-            // Activate the premium server checker screen
+            // 1. Loading overlay screen eka active karanawa
             overlay.classList.add('active');
             
-            const totalDuration = 5000; // Exact 5 seconds loading speed
+            const totalDuration = 5000; // Exact 5 seconds running time lock
             const intervalStep = 30; 
             let elapsed = 0;
 
@@ -163,7 +163,7 @@
                 if (currentProgress >= 100) {
                     currentProgress = 100;
                     clearInterval(timer);
-                    showMainPortal(); // Show full screen bot frame when done
+                    showMainBotPortal(); // 2. Time eka iwara unama bot system eka load කරනවා
                 }
 
                 percentText.innerText = currentProgress;
@@ -171,12 +171,13 @@
             }, intervalStep);
         }
 
-        function showMainPortal() {
+        function showMainBotPortal() {
             const iframe = document.getElementById('bot-core-frame');
+            // Login window ekayi loading overlay ekayi okkoma remove karanawa
             document.getElementById('loginPage').classList.add('hidden');
             document.getElementById('loadingOverlay').classList.remove('active');
             
-            // Fade-in reveal effect for the original full screen iframe
+            // 3. Kelinma thota oni link eka 100% full screen smooth fade-in reveal wenna set kala
             iframe.classList.add('portal-ready');
         }
     </script>
