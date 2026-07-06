@@ -2,284 +2,381 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MR HASHUU OFC</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+    <title>DCT-MINI-BOT | Official Console</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <script src="https://unpkg.com/scrollreveal"></script>
+
     <style>
-        :root { --primary: #7B2CBF; --secondary: #00F5FF; --bg: #020204; }
-        * { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: #ffffff; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        
-        /* High-End Glassmorphism UI */
-        .glass { 
-            background: rgba(255, 255, 255, 0.01); 
-            backdrop-filter: blur(40px); 
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            box-shadow: 0 30px 70px -10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05); 
-        }
-        
-        /* -------------------------------------------------------------
-           IPHONE (iOS) DYNAMIC ISLAND NOTIFICATION STYLE
-        ------------------------------------------------------------- */
-        .ios-toast {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%) scale(0.9);
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 0, 85, 0.2);
-            padding: 12px 24px;
-            border-radius: 50px;
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,85,0.1);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0;
-            pointer-events: none;
-        }
-        .ios-toast.active {
-            top: 24px;
-            transform: translateX(-50%) scale(1);
-            opacity: 1;
+        :root {
+            --bg: #020204;
+            --accent: #00f5ff;
+            --accent-purple: #7b2cbf;
+            --accent-glow: rgba(0, 245, 255, 0.3);
+            --glass: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.07);
+            --text-main: #ffffff;
+            --text-sec: #a1a1a6;
         }
 
-        /* -------------------------------------------------------------
-           ULTRA-PREMIUM NUMBER PERCENTAGE LOADER OVERLAY
-        ------------------------------------------------------------- */
-        .loading-overlay { 
-            position: fixed; 
-            inset: 0; 
-            background: #000000; 
-            z-index: 9999; 
-            display: none; 
-            align-items: center; 
-            justify-content: center; 
-            flex-direction: column; 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
-        .loading-overlay.active { display: flex; }
+
+        /* Matrix Background */
+        #matrix {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.06; pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 6%; background: rgba(2, 2, 4, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 18px; font-weight: 800; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .logo i { color: var(--accent); filter: drop-shadow(0 0 8px var(--accent-glow)); }
+        .logo span { font-weight: 400; color: var(--text-sec); font-size: 13px; }
+
+        .status-badge {
+            background: rgba(0, 245, 255, 0.06); border: 1px solid rgba(0, 245, 255, 0.2);
+            padding: 5px 12px; border-radius: 100px; display: flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 700; color: var(--accent);
+        }
+        .pulse-dot {
+            width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent); animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px var(--accent); }
+        }
+
+        /* Hero Section */
+        .hero { text-align: center; padding: 80px 6% 40px; position: relative; }
+        .hero h1 { font-size: clamp(32px, 6.5vw, 64px); margin-bottom: 20px; font-weight: 800; line-height: 1.15; letter-spacing: -1px; }
+        .hero h1 span { background: linear-gradient(135deg, #fff 30%, var(--accent) 80%, var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-sec); font-size: clamp(14px, 4vw, 17px); max-width: 620px; margin: 0 auto 35px; line-height: 1.6; }
+
+        /* Tech Dashboard */
+        .mini-dash {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            max-width: 420px; margin: 0 auto 35px; background: rgba(255,255,255,0.01);
+            border: 1px solid var(--border); padding: 12px; border-radius: 14px;
+        }
+        .dash-item { text-align: center; }
+        .dash-item .label { font-size: 10px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .dash-item .val { font-size: 14px; font-weight: 700; color: #fff; }
+
+        /* Core Action Buttons */
+        .main-btns { display: flex; gap: 12px; justify-content: center; flex-direction: column; max-width: 320px; margin: 0 auto; }
         
-        .percentage-num {
-            font-size: 84px;
-            font-weight: 800;
-            letter-spacing: -4px;
-            background: linear-gradient(180deg, #ffffff 30%, #333333 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1;
-            margin-bottom: 6px;
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.1));
+        .btn-main {
+            padding: 15px 30px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 14px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s ease;
+            border: 1px solid var(--border); position: relative; cursor: pointer;
         }
-        .percentage-num::after {
-            content: '%';
-            font-size: 24px;
-            margin-left: 2px;
-            color: #444;
-            font-weight: 600;
-        }
+        
+        .btn-primary { background: linear-gradient(135deg, #007aff, var(--accent-purple)); color: white; border: none; box-shadow: 0 8px 25px rgba(123, 44, 191, 0.3); }
+        .btn-secondary { background: var(--glass); color: white; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 
-        .status-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            color: #555555;
-            margin-bottom: 36px;
-            font-weight: 700;
-        }
+        .btn-main:active { transform: scale(0.96); }
 
-        .progress-track {
-            width: 160px;
-            height: 2px;
+        /* Features Responsive Cards */
+        .features { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 40px 6%; }
+        .card {
+            background: var(--glass); border: 1px solid var(--border);
+            padding: 30px 24px; border-radius: 18px; transition: all 0.3s ease;
+            text-align: left; position: relative;
+        }
+        .card:hover { 
+            border-color: rgba(0, 245, 255, 0.3);
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
-        .loader-progress { 
-            width: 0%; 
-            height: 100%; 
-            background: #ffffff; 
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-            transition: width 0.04s linear; 
-        }
+        .card i { font-size: 26px; background: linear-gradient(135deg, var(--accent), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 18px; }
+        .card h3 { font-size: 18px; margin-bottom: 8px; font-weight: 700; }
+        .card p { color: var(--text-sec); line-height: 1.5; font-size: 14px; }
 
-        /* -------------------------------------------------------------
-           IFRAME TARGET SYSTEM
-        ------------------------------------------------------------- */
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1;
-            opacity: 0;
-            transform: scale(1.03);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-            pointer-events: none;
+        /* Reviews Mobile Slider Layout */
+        .reviews-section { padding: 60px 6% 40px; text-align: center; }
+        .reviews-section h2 { font-size: 26px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
+        .reviews-container {
+            display: flex; gap: 16px; overflow-x: auto; padding: 20px 4px;
+            scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch;
         }
-        iframe.portal-ready {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-
-        .hidden { display: none !important; }
+        .reviews-container::-webkit-scrollbar { display: none; }
         
-        .btn-clickable {
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        .review-card {
+            flex: 0 0 85%; min-width: 270px; background: var(--glass);
+            border: 1px solid var(--border); padding: 25px; border-radius: 16px;
+            text-align: left; scroll-snap-align: center; transition: 0.3s;
         }
-        .btn-clickable:active {
-            opacity: 0.85;
-            transform: scale(0.97);
+        .stars { color: #ffb800; font-size: 12px; margin-bottom: 12px; }
+        .review-text { color: var(--text-sec); font-size: 13.5px; line-height: 1.5; margin-bottom: 16px; font-style: italic; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-avatar { width: 36px; height: 36px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--accent); border: 1px solid var(--border); font-size: 13px; }
+        .user-details h4 { font-size: 13px; font-weight: 700; }
+        .user-details span { font-size: 11px; color: var(--text-sec); }
+
+        /* Architecture Info */
+        .contact {
+            text-align: center; padding: 45px 20px;
+            background: linear-gradient(180deg, transparent, rgba(255,255,255,0.01));
+            margin: 30px 6% 60px; border-radius: 20px; border: 1px solid var(--border);
+        }
+        .contact h2 { font-size: 22px; margin-bottom: 12px; font-weight: 800; }
+        .contact p { color: var(--text-sec); line-height: 1.6; font-size: 14px; }
+
+        footer { text-align: center; padding: 30px 20px; color: var(--text-sec); font-size: 12px; border-top: 1px solid var(--border); letter-spacing: 0.3px; }
+
+        /* Mobile Seamless Web Viewer (100% Fit Layer) */
+        #web-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000; z-index: 9999; display: none; opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        #web-container iframe { width: 100%; height: 100%; border: none; }
+        
+        .close-viewer {
+            position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.1);
+            color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 10px 16px;
+            border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 12px;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 10000;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .reveal { visibility: hidden; }
+
+        /* Desktop Optimization (Responsive scaling up) */
+        @media (min-width: 769px) {
+            nav { padding: 20px 8%; }
+            .hero { padding: 120px 5% 60px; }
+            .main-btns { flex-direction: row; max-width: none; }
+            .features { grid-template-columns: repeat(3, 1fr); padding: 60px 8%; gap: 30px; }
+            .review-card { flex: 0 0 calc(33.333% - 11px); }
+            .contact { margin: 40px 8% 80px; padding: 60px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="iosToast" class="ios-toast">
-        <div class="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-[10px] font-black text-black">!</div>
-        <span class="text-xs font-bold tracking-wide text-red-400">NOT ALLOWED THIS TIME</span>
+    <canvas id="matrix"></canvas>
+
+    <!-- Full-screen Mobile Fitted Iframe Overlay -->
+    <div id="web-container">
+        <button class="close-viewer" onclick="closeViewer()"><i class="fas fa-arrow-left"></i> Exit Console</button>
+        <iframe id="app-frame" src=""></iframe>
     </div>
 
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="percentage-num" id="percentage-counter">0</div>
-        <div class="status-label">CHECKING SERVERS</div>
-        <div class="progress-track">
-            <div id="loaderProgress" class="loader-progress"></div>
+    <nav>
+        <div class="logo animate__animated animate__fadeInLeft">
+            <i class="fas fa-terminal"></i> DCT-MINI-BOT <span>Console</span>
+        </div>
+        <div class="status-badge animate__animated animate__fadeInRight">
+            <div class="pulse-dot"></div> ACTIVE
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1 class="reveal">Next Gen <span>WhatsApp Bot</span> System</h1>
+        <p class="reveal">A sleek, blazing-fast, and incredibly stable automation framework designed and developed by Mr Hashuu. Connect effortlessly with premium multi-device nodes.</p>
+        
+        <!-- Live Technical Stats -->
+        <div class="mini-dash reveal">
+            <div class="dash-item">
+                <div class="label">Ping Speed</div>
+                <div class="val" style="color: var(--accent);">0.5s</div>
+            </div>
+            <div class="dash-item" style="border-left: 1px solid var(--border); border-right: 1px solid var(--border);">
+                <div class="label">Uptime Logs</div>
+                <div class="val">24/7 Live</div>
+            </div>
+            <div class="dash-item">
+                <div class="label">Commands</div>
+                <div class="val" style="color: var(--accent-purple); font-weight: 800;">400+</div>
+            </div>
+        </div>
+
+        <div class="main-btns reveal">
+            <!-- Smooth Internal Overlay Trigger -->
+            <button onclick="openLinkSeamlessly('https://dct-md-mini-production.up.railway.app/')" class="btn-main btn-primary">
+                <i class="fas fa-bolt"></i> Connect Now
+            </button>
+            <a href="https://wa.me/94711659196?text=Hello%20Mr%20Hashuu,%20I%20want%20to%20know%20about%20DCT%20Mini%20Bot" class="btn-main btn-secondary" target="_blank">
+                <i class="fab fa-whatsapp"></i> Contact Owner
+            </a>
         </div>
     </div>
 
-    <div id="loginPage" class="min-h-screen flex items-center justify-center px-6 relative z-10">
-        <div class="glass rounded-[2.8rem] p-10 max-w-md w-full text-center border-white/5 relative overflow-hidden">
-            <div class="absolute -top-10 -left-10 w-40 h-40 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Features Responsive Section -->
+    <div class="features">
+        <div class="card reveal">
+            <i class="fas fa-gauge-high"></i>
+            <h3>Supreme Execution</h3>
+            <p>Engineered for hyper-responsiveness. DCT-MINI-BOT processes triggers under 0.5s, delivering unmatched speed directly to your chats.</p>
+        </div>
+        <div class="card reveal">
+            <i class="fas fa-cloud-bolt"></i>
+            <h3>Zero Hosting Costs</h3>
+            <p>Eliminate costly monthly panel or server bills. The unique structural framework synchronizes seamlessly to cloud environments natively.</p>
+        </div>
+        <div class="card reveal">
+            <i class="fas fa-shield-halved"></i>
+            <h3>Ironclad Privacy</h3>
+            <p>Your authentication credentials and multi-device connection logs route exclusively through standard end-to-end encryption protocols.</p>
+        </div>
+    </div>
 
-            <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-cyan-500 rounded-3xl mx-auto mb-6 flex items-center justify-center shadow-2xl shadow-purple-500/20 text-4xl font-black">H</div>
-            <h1 class="text-3xl font-extrabold mb-8 tracking-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">Login Server</h1>
-            
-            <div id="loginOptions" class="space-y-4">
-                <button id="googleBtn" class="btn-clickable w-full bg-white text-black py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 cursor-pointer select-none shadow-lg active:scale-95">
-                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5" alt=""> Continue with Google
-                </button>
-                <button id="githubBtn" class="btn-clickable w-full bg-[#0d1117] text-white border border-white/10 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 cursor-pointer select-none active:scale-95 hover:bg-[#161b22]">
-                    <svg class="w-5 fill-white" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.11.81 2.235 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    Continue with GitHub
-                </button>
-                <button id="guestOptBtn" class="btn-clickable w-full bg-purple-600/5 text-purple-400 border border-purple-600/10 py-4 rounded-2xl font-bold text-sm cursor-pointer select-none hover:bg-purple-600/10">Guest Access</button>
-            </div>
-
-            <div id="googleForm" class="hidden space-y-4 text-left animate-fadeIn">
-                <div class="text-center mb-2">
-                    <p class="text-xs font-bold text-zinc-400 flex items-center justify-center gap-1">
-                         Google Account Verification
-                    </p>
+    <!-- Verified Reviews Responsive Slider -->
+    <div class="reviews-section reveal">
+        <h2><i class="fas fa-quote-left" style="color: var(--accent); font-size: 18px; margin-right: 8px;"></i> User Feedback</h2>
+        <p style="color: var(--text-sec); margin-bottom: 25px; font-size: 14px;">What active community administrators say about this project.</p>
+        
+        <div class="reviews-container">
+            <div class="review-card">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <div class="review-text">"Pattama bot ekak mchan. Speed eka superb, anika salli yanne nathi nisa ona kenekuta use krnn puluwan. Mr Hashuu maxxa job ekak karala thiyenne."</div>
+                <div class="user-info">
+                    <div class="user-avatar">S</div>
+                    <div class="user-details">
+                        <h4>Sahan Kavinda</h4>
+                        <span>Group Admin</span>
+                    </div>
                 </div>
-                <input type="text" id="gName" placeholder="Google Account Name" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-white transition text-sm">
-                <input type="tel" id="gPhone" placeholder="WhatsApp Number" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-white transition text-sm">
-                <button id="gLaunchBtn" class="btn-clickable w-full bg-white text-black py-4 rounded-2xl font-black text-sm shadow-xl transition cursor-pointer select-none">CONFIRM & LAUNCH</button>
-                <button onclick="hideAllForms()" class="w-full text-zinc-500 text-xs font-bold mt-2 text-center block cursor-pointer hover:text-zinc-400">Go Back</button>
+            </div>
+            
+            <div class="review-card">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <div class="review-text">"Commands 400+ thiyena nisa kisima deyak adu na. Configuration process eka mara simple responsive design ekata mobile ekatath kiyලම හදලා තියෙනවා."</div>
+                <div class="user-info">
+                    <div class="user-avatar" style="color: var(--accent-purple);">A</div>
+                    <div class="user-details">
+                        <h4>Ashen Fernando</h4>
+                        <span>Developer</span>
+                    </div>
+                </div>
             </div>
 
-            <div id="guestForm" class="hidden space-y-4 text-left animate-fadeIn">
-                <input type="text" id="userName" placeholder="Your Full Name" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-purple-500 transition text-sm">
-                <input type="tel" id="userPhone" placeholder="WhatsApp Number" class="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-purple-500 transition text-sm">
-                <button id="launchBtn" class="btn-clickable w-full bg-cyan-500 text-black py-4 rounded-2xl font-black text-sm shadow-lg shadow-cyan-500/20 cursor-pointer select-none">LAUNCH SYSTEM</button>
-                <button onclick="hideAllForms()" class="w-full text-zinc-500 text-xs font-bold mt-2 text-center block cursor-pointer hover:text-zinc-400">Go Back</button>
+            <div class="review-card">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-stroke"></i></div>
+                <div class="review-text">"24/7 down wenne nathuwa run wenawa කිසිම අවුලක් නැතුව. Mr Hashuu ගේ security features පට්ටම premium."</div>
+                <div class="user-info">
+                    <div class="user-avatar">K</div>
+                    <div class="user-details">
+                        <h4>Kasun Perera</h4>
+                        <span>Community Mod</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <iframe 
-        src="https://dct-md-mini-production.up.railway.app/" 
-        title="MR HASHUU FREE BOT" 
-        id="bot-core-frame">
-    </iframe>
+    <!-- Architecture Section -->
+    <div class="contact reveal">
+        <h2><i class="fas fa-code-branch" style="color: var(--accent); margin-right: 6px;"></i> Architecture Nodes</h2>
+        <p>DCT-MINI-BOT operates on a highly optimized modular layer maintained to execute text/media requests seamlessly. It empowers administrators to customize automated server rules efficiently.</p>
+    </div>
+
+    <footer>
+        DCT-MINI-BOT Panel || Maintained By Mr Hashuu || All Rights Reserved || ©2026
+    </footer>
 
     <script>
-        // Setup Smooth Click Actions
-        document.getElementById('googleBtn').addEventListener('click', showGoogleForm);
-        document.getElementById('githubBtn').addEventListener('click', triggerIphoneNotification);
-        document.getElementById('guestOptBtn').addEventListener('click', showGuestForm);
+        // --- 1. Matrix Cyber Background ---
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
         
-        document.getElementById('gLaunchBtn').addEventListener('click', () => runSystemLoader());
-        document.getElementById('launchBtn').addEventListener('click', () => runSystemLoader());
-
-        function showGoogleForm() { 
-            document.getElementById('loginOptions').classList.add('hidden'); 
-            document.getElementById('guestForm').classList.add('hidden'); 
-            document.getElementById('googleForm').classList.remove('hidden'); 
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        function showGuestForm() { 
-            document.getElementById('loginOptions').classList.add('hidden'); 
-            document.getElementById('googleForm').classList.add('hidden'); 
-            document.getElementById('guestForm').classList.remove('hidden'); 
-        }
-        
-        function hideAllForms() { 
-            document.getElementById('guestForm').classList.add('hidden'); 
-            document.getElementById('googleForm').classList.add('hidden'); 
-            document.getElementById('loginOptions').classList.remove('hidden'); 
-        }
+        const letters = "0101DCTMINIBOTSYSTEMHASHUU01";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
 
-        // iPhone Dynamic Island Notification Engine
-        function triggerIphoneNotification() {
-            const notification = document.getElementById('iosToast');
-            notification.classList.add('active');
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(2, 2, 4, 0.06)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00f5ff';
+            ctx.font = '600 ' + fontSize + 'px monospace';
             
-            // Auto close after 2.5 seconds
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.985) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // --- 2. Compact Scroll Reveal ---
+        ScrollReveal().reveal('.reveal', {
+            distance: '30px',
+            duration: 900,
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+            interval: 100,
+            origin: 'bottom',
+            reset: false
+        });
+
+        // --- 3. Full-Screen Fit Mobile Web Viewer Handler ---
+        const container = document.getElementById('web-container');
+        const frame = document.getElementById('app-frame');
+
+        function openLinkSeamlessly(url) {
+            if(window.navigator.vibrate) window.navigator.vibrate(20);
+            
+            frame.src = url;
+            container.style.display = 'block';
             setTimeout(() => {
-                notification.classList.remove('active');
-            }, 2500);
+                container.style.opacity = '1';
+                document.body.style.overflow = 'hidden'; 
+            }, 40);
         }
 
-        // Exact 5-Second Percentage Loading Engine
-        function runSystemLoader() {
-            const overlay = document.getElementById('loadingOverlay');
-            const progressLine = document.getElementById('loaderProgress');
-            const percentCounter = document.getElementById('percentage-counter');
-            
-            overlay.classList.add('active');
-            
-            const totalDuration = 5000; // Locked strictly to 5 seconds
-            const intervalStep = 30; 
-            let elapsed = 0;
+        function closeViewer() {
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.style.display = 'none';
+                frame.src = ''; 
+                document.body.style.overflow = 'auto'; 
+            }, 400);
+        }
 
-            const timer = setInterval(() => {
-                elapsed += intervalStep;
-                let currentProgress = Math.floor((elapsed / totalDuration) * 100);
-
-                if (currentProgress >= 100) {
-                    currentProgress = 100;
-                    clearInterval(timer);
-                    renderMainIframePortal(); // Open Bot System
+        // --- 4. Review Mobile Swipe Auto-Scroll ---
+        const rContainer = document.querySelector('.reviews-container');
+        let scrollAmount = 0;
+        function autoScrollReviews() {
+            if (window.innerWidth > 768) {
+                scrollAmount += 0.8;
+                if (scrollAmount >= rContainer.scrollWidth - rContainer.clientWidth) {
+                    scrollAmount = 0;
                 }
-
-                percentCounter.innerText = currentProgress;
-                progressLine.style.width = currentProgress + "%";
-            }, intervalStep);
+                rContainer.scrollLeft = scrollAmount;
+            }
         }
-
-        function renderMainIframePortal() {
-            const iframe = document.getElementById('bot-core-frame');
-            document.getElementById('loginPage').classList.add('hidden');
-            document.getElementById('loadingOverlay').classList.remove('active');
-            
-            // Smoothly renders full screen Bot framework
-            iframe.classList.add('portal-ready');
-        }
+        setInterval(autoScrollReviews, 30);
     </script>
 </body>
-                </html>
+                    </html>
